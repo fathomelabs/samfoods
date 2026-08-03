@@ -59,6 +59,8 @@
   .btn.primary:hover{ transform:translateY(-2px); background:var(--chili-dark); }
   .btn.outline{ background:transparent; color:var(--navy); border:1.5px solid var(--navy); }
   .btn.outline:hover{ background:var(--navy); color:#fff; }
+  .wa-icon{ width:18px; height:18px; object-fit:contain; display:inline-block; vertical-align:-3px; }
+  .arrow-icon{ width:14px; height:14px; object-fit:contain; display:inline-block; vertical-align:-1px; margin-left:2px; }
 
   .hero-image{
     position:relative; border-radius:28px; overflow:hidden; aspect-ratio:1/1; background:var(--cream-2);
@@ -85,6 +87,21 @@
   .section-head p{ color:var(--navy-soft); font-size:.98rem; line-height:1.6; }
 
   /* VARIANTS */
+  .filter-row{ display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+  .filter-chip{
+    font-family:'Inter'; font-weight:700; font-size:.85rem; color:var(--navy-soft);
+    background:var(--card); border:1.5px solid var(--line); padding:11px 22px; border-radius:100px;
+    cursor:pointer; transition:.2s;
+  }
+  .filter-chip.active{ background:var(--chili); border-color:var(--chili); color:#fff; }
+  .filter-chip:hover:not(.active){ border-color:var(--chili); color:var(--chili); }
+  .region-note{
+    display:none; max-width:520px; margin:0 auto 28px; text-align:center; font-size:.82rem;
+    color:var(--navy); background:var(--cream-2); border:1px solid var(--line); border-radius:100px;
+    padding:10px 18px;
+  }
+  .region-note.show{ display:block; }
+  .variant-card.hide{ display:none; }
   .variant-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
   .variant-card{
     background:var(--card); border-radius:22px; overflow:hidden; border:1px solid var(--line);
@@ -155,6 +172,14 @@
   .final-cta p{ color:var(--navy-soft); margin-bottom:24px; max-width:440px; margin-left:auto; margin-right:auto; }
 
   footer{ text-align:center; padding:36px 24px 46px; color:var(--navy-soft); font-size:.82rem; border-top:1px solid var(--line); margin-top:20px; }
+  .fathomelabs-promo{
+    display:inline-flex; flex-direction:column; align-items:center; gap:3px; margin-top:18px;
+    padding:16px 26px; border-radius:16px; background:var(--card); color:var(--navy);
+    font-size:.8rem; font-weight:500; border:2px dashed var(--chili); transition:.2s;
+  }
+  .fathomelabs-promo:hover{ background:var(--cream-2); transform:translateY(-2px); }
+  .fathomelabs-promo b{ font-weight:700; font-size:.85rem; }
+  .fathomelabs-promo .cta-line{ display:inline-flex; align-items:center; gap:5px; color:var(--chili); font-weight:700; margin-top:2px; }
   footer .logo{ justify-content:center; display:flex; margin-bottom:10px; }
 
   @media (max-width:860px){
@@ -177,7 +202,7 @@
 <nav>
   <div class="nav-inner">
     <div class="logo">Samudra <span>Foods</span></div>
-    <a href="#" id="navWaBtn" class="nav-cta" target="_blank" rel="noopener">💬 Order</a>
+    <a href="#" id="navWaBtn" class="nav-cta" target="_blank" rel="noopener"><img class="wa-icon" alt="WhatsApp" onerror="this.style.display='none'"> Order</a>
   </div>
 </nav>
 
@@ -188,12 +213,12 @@
       <h1>Pedasnya nampol, <em>gurihnya nagih.</em></h1>
       <p>Sambal seafood buatan rumahan dari cumi, udang, teri, sampai tongkol pilihan. Dimasak tanpa pengawet, siap nemenin makan sehari-hari.</p>
       <div class="btn-row">
-        <a href="#" id="heroWaBtn" class="btn primary" target="_blank" rel="noopener">💬 Order via WhatsApp</a>
+        <a href="#" id="heroWaBtn" class="btn primary" target="_blank" rel="noopener"><img class="wa-icon" alt="WhatsApp" onerror="this.style.display='none'"> Order via WhatsApp</a>
         <a href="#varian" class="btn outline">Lihat Varian</a>
       </div>
     </div>
     <div class="hero-image">
-      <img id="heroImg" src="" alt="Samudra Foods sambal seafood" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <img id="heroImg" alt="Samudra Foods sambal seafood" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
       <div class="img-fallback">
         <div class="ic">🌶️</div>
       </div>
@@ -204,10 +229,12 @@
 
 <section id="varian" class="wrap">
   <div class="section-head">
-    <span class="tag">Pilihan Varian</span>
-    <h2>6 Varian Sambal Seafood</h2>
-    <p>Semua dimasak dengan bumbu rempah pilihan, tinggal pilih favoritmu.</p>
+    <span class="tag">Menu Kami</span>
+    <h2>Sambal, Rice Bowl &amp; Snack</h2>
+    <p>Pilih kategori, lalu pilih favoritmu.</p>
   </div>
+  <div class="filter-row" id="catFilterRow"></div>
+  <div class="region-note" id="regionNote"></div>
   <div class="variant-grid" id="variantGrid"></div>
 </section>
 
@@ -251,13 +278,14 @@
   <div class="final-cta">
     <h2>Siap coba Samudra Foods?</h2>
     <p>Chat langsung buat tanya stok, varian favorit, atau mau pesan banyak buat acara.</p>
-    <a href="#" id="finalWaBtn" class="btn primary" target="_blank" rel="noopener">💬 Chat via WhatsApp</a>
+    <a href="#" id="finalWaBtn" class="btn primary" target="_blank" rel="noopener"><img class="wa-icon" alt="WhatsApp" onerror="this.style.display='none'"> Chat via WhatsApp</a>
   </div>
 </section>
 
 <footer>
   <div class="logo">Samudra <span style="color:var(--chili);">Foods</span></div>
-  <div>© 2026 Samudra Foods</div>
+  <div>© 2026 Samudra Foods. Sambal seafood rumahan.</div>
+  <a href="#" id="fathomelabsPromo" target="_blank" rel="noopener" class="fathomelabs-promo"></a>
 </footer>
 
 <script>
@@ -273,26 +301,59 @@ const CONFIG = {
   waNumber: "62895366216385",
   waMessageDefault: "Halo kak 👋\n\nSaya ingin order sambal.\n\nVarian: \nJumlah: \nAlamat Pengiriman: \nMetode Pembayaran: \n\nTerima kasih.",
 
+  icons: {
+    whatsapp: "images/icon-whatsapp.webp", // ikon WhatsApp untuk semua tombol chat
+    arrow: "images/icon-arrow.webp"        // ikon panah untuk semua tombol CTA
+  },
+
   heroImage: "images/hero.webp", // foto hero
 
-  variants: [
-    { name: "Sambal Cumi Cabai Hijau", spice: 2, price: "Rp 28.000",
+  categories: [
+    { key: "sambal", label: "Sambal" },
+    { key: "makanan", label: "Rice Bowl" },
+    { key: "snack", label: "Snack" }
+  ],
+  // Catatan khusus yang muncul saat kategori "makanan" (Rice Bowl) dipilih
+  regionNote: "🛵 Rice Bowl khusus wilayah Yogyakarta (Sleman, Kota, Bantul). Sambal & Snack bisa dikirim ke luar kota via ekspedisi.",
+
+  products: [
+    // ---- SAMBAL (bisa kirim luar kota via ekspedisi) ----
+    { cat: "sambal", name: "Sambal Cumi Cabai Hijau", spice: 2, price: "Rp 28.000",
       desc: "Cumi dimasak dengan sambal cabai hijau, gurih dengan sensasi pedas segar.",
       image: "images/sambal-cumi-hijau.webp" },
-    { name: "Sambal Cumi Cabai Merah", spice: 2, price: "Rp 28.000",
+    { cat: "sambal", name: "Sambal Cumi Cabai Merah", spice: 2, price: "Rp 28.000",
       desc: "Cumi dimasak dengan sambal cabai merah khas, gurih dan sedikit manis.",
       image: "images/sambal-cumi-merah.webp" },
-    { name: "Sambal Udang Rebon", spice: 3, price: "Rp 25.000",
+    { cat: "sambal", name: "Sambal Udang Rebon", spice: 3, price: "Rp 25.000",
       desc: "Udang rebon kering berpadu sambal pedas gurih, renyah di setiap suapan.",
       image: "images/sambal-udang-rebon.webp" },
-    { name: "Sambal Teri", spice: 2, price: "Rp 25.000",
+    { cat: "sambal", name: "Sambal Teri", spice: 2, price: "Rp 25.000",
       desc: "Teri nasi crispy dengan sambal pedas manis, favorit banyak orang.",
       image: "images/sambal-teri.webp" },
-    { name: "Sambal Tongkol", spice: 3, price: "Rp 30.000",
+    { cat: "sambal", name: "Sambal Tongkol", spice: 3, price: "Rp 30.000",
       desc: "Suwiran ikan tongkol dimasak dengan sambal kaya rempah.",
       image: "images/sambal-tongkol.webp" },
-    { name: "Sambal Udang", spice: 2, price: "Rp 32.000",
-      desc: "Udang segar dengan sambal pedas gurih khas rumahan.", image: "images/sambal-udang.webp" }
+    { cat: "sambal", name: "Sambal Udang", spice: 2, price: "Rp 32.000",
+      desc: "Udang segar dengan sambal pedas gurih khas rumahan.",
+      image: "images/sambal-udang.webp" },
+
+    // ---- RICE BOWL (khusus Yogyakarta: Sleman, Kota, Bantul) ----
+    { cat: "makanan", name: "Rice Bowl Ayam Sambal Cumi", spice: 2, price: "Rp -",
+      desc: "Nasi dengan ayam suwir dan sambal cumi khas Samudra Foods.", image: "images/ricebowl-ayam-sambal-cumi.webp" },
+    { cat: "makanan", name: "Rice Bowl Beef Slice Sambal Teri", spice: 2, price: "Rp -",
+      desc: "Irisan beef slice dipadukan sambal teri pedas manis.", image: "images/ricebowl-beef-slice-sambal-teri.webp" },
+    { cat: "makanan", name: "Rice Bowl Udang Crispy", spice: 1, price: "Rp -",
+      desc: "Udang crispy renyah dengan pilihan sambal favoritmu.", image: "images/ricebowl-udang-crispy.webp" },
+    { cat: "makanan", name: "Rice Bowl Mixed Protein", spice: 2, price: "Rp -",
+      desc: "Kombinasi beberapa protein dalam satu bowl, cocok buat yang susah milih.", image: "images/ricebowl-mixed-protein.webp" },
+
+    // ---- SNACK (bisa kirim luar kota via ekspedisi) ----
+    { cat: "snack", name: "Kering Kentang Pedas Manis", spice: 1, price: "Rp -",
+      desc: "Kentang kering renyah dengan balutan bumbu pedas manis.", image: "images/snack-kering-kentang.webp" },
+    { cat: "snack", name: "Lanting Pedas Manis", spice: 1, price: "Rp -",
+      desc: "Lanting renyah khas, dibalut bumbu pedas manis.", image: "images/snack-lanting.webp" },
+    { cat: "snack", name: "Manggleng Pedas Manis", spice: 1, price: "Rp -",
+      desc: "Manggleng singkong gurih dengan sentuhan pedas manis.", image: "images/snack-manggleng.webp" }
   ],
 
   why: [
@@ -311,17 +372,26 @@ const CONFIG = {
 
   orderChannels: {
     shopeefood: {
-      url: "https://shopeefood.co.id/", // ganti dengan link toko ShopeeFood kamu
+      url: "https://spf.shopee.co.id/30msFmOCWm", // ganti dengan link toko ShopeeFood kamu
       logo: "images/logo-shopeefood.webp"
     },
     gofood: {
-      url: "https://gofood.co.id/", // ganti dengan link toko GoFood kamu
+      url: "https://gofood.link/u/W5Y1Z", // ganti dengan link toko GoFood kamu
       logo: "images/logo-gofood.webp"
     },
     grabfood: {
-      url: "https://food.grab.com/", // ganti dengan link toko GrabFood kamu
+      url: "https://r.grab.com/g/6-20260802_143530_ba57f6ed0176427d92e964ac6dd6b04d_MEXMPS-6-C64AR7MAUGADNX", // ganti dengan link toko GrabFood kamu
       logo: "images/logo-grabfood.webp"
     }
+  },
+
+  // Promo jasa fathomelabs di footer
+  fathomelabs: {
+    line1: "Suka sama tampilan website ini?",
+    line2: "Ini juga hasil racikan fathomelabs.",
+    cta: "Chat fathomelabs, bikin punyamu",
+    waNumber: "6288983699837",
+    waMessage: "Halo fathomelabs, saya suka tampilan website Samudra Foods. Boleh tanya-tanya soal bikin website juga?"
   }
 };
 
@@ -354,21 +424,44 @@ if(!CONFIG.heroImage){ document.getElementById('heroImg').style.display = 'none'
 ['navWaBtn','heroWaBtn','finalWaBtn'].forEach(id => {
   document.getElementById(id).href = waLink(CONFIG.waMessageDefault);
 });
+document.querySelectorAll('.wa-icon').forEach(img => { img.src = CONFIG.icons.whatsapp; });
 
-// Variants
-document.getElementById('variantGrid').innerHTML = CONFIG.variants.map(v => `
-  <div class="variant-card">
-    <div class="variant-img">${imgOrFallback(v.image, v.name, "🌶️")}</div>
-    <div class="variant-body">
-      <h3>${v.name}</h3>
-      <div class="spice">${"🌶️".repeat(v.spice)}${"<span style=\"opacity:.25\">" + "🌶️".repeat(3 - v.spice) + "</span>"}</div>
-      <p>${v.desc}</p>
-      <div class="variant-foot">
-        <span class="price">${v.price}</span>
-        <a href="${waLink(buildOrderMessage(v.name))}" target="_blank" rel="noopener" class="variant-cta">Order →</a>
+// Category filter tabs
+document.getElementById('catFilterRow').innerHTML = CONFIG.categories.map((c, i) =>
+  `<button class="filter-chip${i === 0 ? ' active' : ''}" data-cat="${c.key}">${c.label}</button>`).join('');
+
+// Products (all categories rendered, filtered via CSS class toggle)
+function renderProducts(){
+  document.getElementById('variantGrid').innerHTML = CONFIG.products.map(v => `
+    <div class="variant-card" data-cat="${v.cat}">
+      <div class="variant-img">${imgOrFallback(v.image, v.name, v.cat === "makanan" ? "🍚" : (v.cat === "snack" ? "🥔" : "🌶️"))}</div>
+      <div class="variant-body">
+        <h3>${v.name}</h3>
+        <div class="spice">${"🌶️".repeat(v.spice)}${"<span style=\"opacity:.25\">" + "🌶️".repeat(3 - v.spice) + "</span>"}</div>
+        <p>${v.desc}</p>
+        <div class="variant-foot">
+          <span class="price">${v.price}</span>
+          <a href="${waLink(buildOrderMessage(v.name))}" target="_blank" rel="noopener" class="variant-cta">Order <img class="arrow-icon" src="${CONFIG.icons.arrow}" alt="" onerror="this.style.display='none'"></a>
+        </div>
       </div>
-    </div>
-  </div>`).join('');
+    </div>`).join('');
+  attachImageFallbacks();
+}
+renderProducts();
+
+function setActiveCategory(key){
+  document.querySelectorAll('#catFilterRow .filter-chip').forEach(chip =>
+    chip.classList.toggle('active', chip.dataset.cat === key));
+  document.querySelectorAll('.variant-card').forEach(card =>
+    card.classList.toggle('hide', card.dataset.cat !== key));
+  document.getElementById('regionNote').classList.toggle('show', key === 'makanan');
+}
+document.getElementById('catFilterRow').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-cat]');
+  if(btn) setActiveCategory(btn.dataset.cat);
+});
+document.getElementById('regionNote').textContent = CONFIG.regionNote;
+setActiveCategory(CONFIG.categories[0].key);
 
 // Why
 document.getElementById('whyGrid').innerHTML = CONFIG.why.map(w => `
@@ -391,7 +484,7 @@ document.getElementById('orderGrid').innerHTML = orderMeta.map(o => {
     <div class="order-logo">${imgOrFallback(ch.logo, o.name, "🍴")}</div>
     <h4>${o.name}</h4>
     <p>Pesan langsung lewat aplikasi</p>
-    <a href="${ch.url}" target="_blank" rel="noopener">Buka ${o.name} →</a>
+    <a href="${ch.url}" target="_blank" rel="noopener">Buka ${o.name} <img class="arrow-icon" src="${CONFIG.icons.arrow}" alt="" onerror="this.style.display='none'"></a>
   </div>`;
 }).join('');
 
@@ -423,6 +516,12 @@ reviewDotsEl.addEventListener('click', (e) => {
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches && CONFIG.reviews.length > 1){
   setInterval(() => goToSlide(reviewIndex + 1), 4500);
 }
+
+// fathomelabs footer promo
+const fl = CONFIG.fathomelabs;
+const flPromo = document.getElementById('fathomelabsPromo');
+flPromo.innerHTML = `<b>${fl.line1}</b><span>${fl.line2}</span><span class="cta-line">${fl.cta} <img class="arrow-icon" src="${CONFIG.icons.arrow}" alt="" onerror="this.style.display='none'"></span>`;
+flPromo.href = `https://wa.me/${fl.waNumber}?text=${encodeURIComponent(fl.waMessage)}`;
 </script>
 
 </body>
